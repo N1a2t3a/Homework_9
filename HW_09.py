@@ -34,34 +34,43 @@ def show_all_contacts():
     else:
         return "\n".join([f"{name}: {phone}" for name, phone in contacts.items()])
 
+def command_parser(command):
+    command = command.strip()
+
+    if command == "hello":
+        return "How can I help you?"
+    elif command.startswith("add"):
+        contact_info = command[4:]
+        return add_contact(contact_info)
+    elif command.startswith("change"):
+        contact_info = command[7:]
+        return change_phone(contact_info)
+    elif command.startswith("phone"):
+        name = command[6:]
+        return show_phone(name)
+    elif command == "show all":
+        return show_all_contacts()
+    else:
+        return "Invalid command. Please try again."
+
+def process_command(command):
+    if command in ["good bye", "close", "exit"]:
+        print("Good bye!")
+        return False
+
+    result = command_parser(command)
+    print(result)
+    return True
+
 def main():
     print("How can I help you?")
     
     while True:
         command = input("> ").lower()
         
-        if command == "hello":
-            print("How can I help you?")
-        elif command.startswith("add"):
-            contact_info = command[4:]
-            result = add_contact(contact_info)
-            print(result)
-        elif command.startswith("change"):
-            contact_info = command[7:]
-            result = change_phone(contact_info)
-            print(result)
-        elif command.startswith("phone"):
-            name = command[6:]
-            result = show_phone(name)
-            print(f"Phone number: {result}")
-        elif command == "show all":
-            result = show_all_contacts()
-            print(result)
-        elif command in ["good bye", "close", "exit"]:
-            print("Good bye!")
+        if not process_command(command):
             break
-        else:
-            print("Invalid command. Please try again.")
 
 if __name__ == "__main__":
     main()
+
